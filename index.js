@@ -1,4 +1,5 @@
-const express = require('express');
+const express = require('express'),
+  morgan = require('morgan');
 const app = express();
 
 let topMovies = [
@@ -45,6 +46,7 @@ let topMovies = [
 ];
 
 // USE
+app.use(morgan('common'));
 app.use(express.static('public'));
 
 // GET requests
