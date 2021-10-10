@@ -3,54 +3,70 @@ const app = express();
 
 let topMovies = [
   {
-    title: 'Hello1',
-    author: 'Hi1'
+    title: 'Harry Potter and the Philosopher\'s Stone',
+    year: '2001'
   },
   {
-    title: 'Hello2',
-    author: 'Hi2'
+    title: 'Dirty Dancing',
+    year: '1987'
   },
   {
-    title: 'Hello3',
-    author: 'Hi3'
+    title: 'Sell Your Haunted House',
+    year: '2021'
   },
   {
-    title: 'Hello4',
-    author: 'Hi4'
+    title: 'Hotel del Luna',
+    year: '2019'
   },
   {
-    title: 'Hello5',
-    author: 'Hi5'
+    title: 'The Devil Wears Prada',
+    year: '2006'
+  },
+  {
+    title: 'Australia',
+    year: '2008'
+  },
+  {
+    title: 'Healer',
+    year: '2014'
+  },
+  {
+    title: 'The Heirs',
+    year: '2013'
+  },
+  {
+    title: 'Ballet Shoes',
+    year: '2007'
+  },
+  {
+    title: 'Winnetou',
+    year: '1963'
   }
 ];
 
 // USE
 app.use(express.static('public'));
 
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
-});
-
 // GET requests
-// app.get('/', (req,res) => {
-//   res.send('Welcome to my movie club!');
-// });
+app.get('/', (req,res) => {
+  res.send('Welcome to the movie app!');
+});
 //
 // app.get('/documentation', (req, res) => {
 //   res.sendFile('/documentation.html');
 // });
 //
-// app.get('/movies', (req, res) => {
-//   res.json(topMovies);
-// });
+app.get('/movies', (req, res) => {
+  res.json(topMovies);
+});
 
+// ERROR
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('Something broke!');
 });
 
-//listen for requests
+// listen for requests
 app.listen(8080, () => {
   console.log('Your app is listening to port 8080.');
 });
