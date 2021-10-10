@@ -46,20 +46,23 @@ let topMovies = [
 ];
 
 // USE
+
+// logging middleware
 app.use(morgan('common'));
+// sending of static files
 app.use(express.static('public'));
 
 // GET requests
 app.get('/', (req,res) => {
   res.send('Welcome to the movie app!');
 });
-//
-// app.get('/documentation', (req, res) => {
-//   res.sendFile('/documentation.html');
-// });
-//
+
 app.get('/movies', (req, res) => {
   res.json(topMovies);
+});
+
+app.get('/documentation', (req, res) => {
+  res.sendFile('/public/documentation.html', { root: __dirname });
 });
 
 // ERROR
