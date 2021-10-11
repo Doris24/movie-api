@@ -61,10 +61,6 @@ app.get('/movies', (req, res) => {
   res.json(topMovies);
 });
 
-app.get('/documentation', (req, res) => {
-  res.sendFile('/public/documentation.html', { root: __dirname });
-});
-
 // ERROR
 app.use((err, req, res, next) => {
   console.error(err.stack);
