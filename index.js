@@ -4,6 +4,7 @@ const express = require('express'),
   uuid = require('uuid');
 const app = express();
 
+let users = [];
 let topMovies = [
   {
     title: 'Harry Potter and the Philosopher\'s Stone',
@@ -88,12 +89,21 @@ app.get('/directors/:director', (req, res) => {
 });
 
 // new user
-app.post('/register', (req, res) => {
-  res.send('Successful POST to add information about a new user');
+app.post('/users', (req, res) => {
+  let newUser = req.body;
+
+  if (!newUser.name) {
+    const message = 'Missing name in request body';
+    res.status(400).send(message);
+  } else {
+    newUser.id = uuid.v4();
+    users.push(newUser);
+    res.status(201).send(newUser);
+  }
 });
 
 // update username
-app.put('/users/:id/:username', (req, res) => {
+app.put('/users/:id', (req, res) => {
   res.send('Successful PUT to update username');
 });
 
