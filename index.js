@@ -97,18 +97,18 @@ app.put('/users/:id/:username', (req, res) => {
   res.send('Successful PUT to update username');
 });
 
-// user can add movie to favList
-app.post('/users/:id/favList/:title', (req, res) => {
-  res.send('Successful POST to add a movie to favList');
+// user can add movie to favlist
+app.post('/users/:id/favlist/:title', (req, res) => {
+  res.send('Successful POST to add a movie to favlist');
 });
 
-// user can remove movie from favList
-app.delete('/users/:id/favList/:title', (req, res) => {
-  res.send('Successful DELETE to remove movie from favList');
+// user can remove movie from favlist
+app.delete('/users/:id/favlist/:title', (req, res) => {
+  res.send('Successful DELETE to remove movie from favlist');
 });
 
 // user can delete user
-app.delete('/users/:id/unregister', (req, res) => {
+app.delete('/users/:id', (req, res) => {
   res.send('Successful DELETE to unregister user');
 });
 
