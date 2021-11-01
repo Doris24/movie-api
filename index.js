@@ -181,13 +181,39 @@ app.put('/users/:Username', (req, res) => {
 });
 
 // user can add movie to favlist
-app.post('/users/:id/favlist/:title', (req, res) => {
-  res.send('Successful POST to add a movie to favlist');
+app.post('/users/:Username/movies/:MovieID', (req, res) => {
+  Users.findOneAndUpdate(
+    { Username: req.params.Username },
+    {
+      $push: { FavoriteMovies: req.params.MovieID }
+    },
+    { new: true },
+  (err, updatedUser) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    } else {
+      res.json(updatedUser);
+    }
+  });
 });
 
 // user can remove movie from favlist
-app.delete('/users/:id/favlist/:title', (req, res) => {
-  res.send('Successful DELETE to remove movie from favlist');
+app.delete('/users/:Username/movies/:MovieID', (req, res) => {
+  Users.findOneAndUpdate(
+    { Username: req.params.Username },
+    {
+      $pull: { FavoriteMovies: req.params.MovieID }
+    },
+    { new: true },
+  (err, updatedUser) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    } else {
+      res.json(updatedUser);
+    }
+  });
 });
 
 // user can delete user
