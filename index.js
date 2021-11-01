@@ -15,53 +15,6 @@ const Users = Models.User;
 // allow Mongoose to connect to the db to perform CRUD operations
 mongoose.connect('mongodb://localhost:27017/myFlixDB', { useNewURLParser: true, useUnifiedTopology: true });
 
-
-let users = [];
-let topMovies = [
-  {
-    title: 'Harry Potter and the Philosopher\'s Stone',
-    year: '2001',
-    genre: 'fantasy',
-    director: 'Chris Columbus'
-  },
-  {
-    title: 'Dirty Dancing',
-    year: '1987'
-  },
-  {
-    title: 'Sell Your Haunted House',
-    year: '2021'
-  },
-  {
-    title: 'Hotel del Luna',
-    year: '2019'
-  },
-  {
-    title: 'The Devil Wears Prada',
-    year: '2006'
-  },
-  {
-    title: 'Australia',
-    year: '2008'
-  },
-  {
-    title: 'Healer',
-    year: '2014'
-  },
-  {
-    title: 'The Heirs',
-    year: '2013'
-  },
-  {
-    title: 'Ballet Shoes',
-    year: '2007'
-  },
-  {
-    title: 'Winnetou',
-    year: '1963'
-  }
-];
-
 // USE
 
 // logging middleware
@@ -79,7 +32,14 @@ app.get('/', (req,res) => {
 
 // get all movies
 app.get('/movies', (req, res) => {
-  res.json(topMovies);
+  Movies.find()
+    .then((movies) => {
+      res.status(201).json(movies);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
 });
 
 // get data about movie by title
