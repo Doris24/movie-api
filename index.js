@@ -1,9 +1,20 @@
 const express = require('express'),
   morgan = require('morgan'),
   bodyParser = require('body-parser'),
-  uuid = require('uuid')
-  mongoose= require('mongoose');
+  uuid = require('uuid');
+
 const app = express();
+
+// Mongoose:
+const mongoose = require('mongoose');
+const Models = require('./models.js');
+
+const Movies = Models.Movie;
+const Users = Models.User;
+
+// allow Mongoose to connect to the db to perform CRUD operations
+mongoose.connect('mongodb://localhost:27017/myFlixDB', { useNewURLParser: true, useUnifiedTopology: true });
+
 
 let users = [];
 let topMovies = [
