@@ -22,7 +22,7 @@ let userSchema = mongoose.Schema({
   Password: { type: String, required: true },
   Email: { type: String, required: true },
   Birthday: Date,
-  FavorieMovies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movie' }]
+  FavoriteMovies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movie' }]
 });
 
 // Creating models that use the schemas

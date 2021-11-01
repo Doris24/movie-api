@@ -44,14 +44,20 @@ app.get('/movies', (req, res) => {
 
 // get data about movie by title
 app.get('/movies/:title', (req, res) => {
-  let movie = topMovies.find((movie) => {
-    return movie.title === req.params.title;
-  });
-  res.json(movie);
+  Movies.findOne({ Title: req.params.title })
+    .then((movie) => {
+      res.status(201).json(movie);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
 });
+
 
 // get data about genre
 app.get('/genres/:genre', (req, res) => {
+
   res.send('Successful GET request returning data on a genre');
 });
 
@@ -59,6 +65,30 @@ app.get('/genres/:genre', (req, res) => {
 app.get('/directors/:director', (req, res) => {
   res.send('Successful GET request returning data on a director');
 });
+
+// get all movies
+app.get('/users', (req, res) => {
+  Users.find()
+    .then((users) => {
+      res.status(201).json(users);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
+});
+
+// get one user by username
+app.get('/users/:username', (req, res) => {
+  Users.findOne({ Username: req.params.username })
+    .then((user) => {
+      res.status(201).json(user);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
+})
 
 // new user
 app.post('/users', (req, res) => {
