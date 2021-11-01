@@ -11,6 +11,8 @@ const Models = require('./models.js');
 
 const Movies = Models.Movie;
 const Users = Models.User;
+const Genres = Models.Genre;
+const Directors = Models.Director;
 
 // allow Mongoose to connect to the db to perform CRUD operations
 mongoose.connect('mongodb://localhost:27017/myFlixDB', { useNewURLParser: true, useUnifiedTopology: true });
@@ -54,10 +56,21 @@ app.get('/movies/:title', (req, res) => {
     });
 });
 
+// get all genres
 
+app.get('/genre', (req, res) => {
+
+});
 // get data about genre
-app.get('/genres/:genre', (req, res) => {
-
+app.get('/genre/:name', (req, res) => {
+  Movies.findOne({Genre  })
+    .then((genre) => {
+      res.status(201).json(genre);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    })
   res.send('Successful GET request returning data on a genre');
 });
 
