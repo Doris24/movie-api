@@ -128,18 +128,33 @@ app.get('/users/:username', (req, res) => {
     });
 })
 
-// new user
+// create new user
 app.post('/users', (req, res) => {
-  let newUser = req.body;
-
-  if (!newUser.name) {
-    const message = 'Missing name in request body';
-    res.status(400).send(message);
-  } else {
-    newUser.id = uuid.v4();
-    users.push(newUser);
-    res.status(201).send(newUser);
-  }
+  Users.findOne({ Username: req.params.Username })
+    .then((user) => {
+      if (user) {
+        return res.status(400).send(req.params.Username + 'already exists');
+      } else {
+        Users
+          .create({
+            Username: req.body.Username,
+            Password: req.body.Password,
+            Email: req.body.Email,
+            Birthday: req.body.Birthday
+          })
+          .then((user) => {
+            res.status(201).json(user);
+          })
+          .catch((err) => {
+            console.error(err);
+            res.status(500).send('Error: ' + err);
+          })
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
 });
 
 // update username
@@ -176,8 +191,19 @@ app.delete('/users/:id/favlist/:title', (req, res) => {
 });
 
 // user can delete user
-app.delete('/users/:id', (req, res) => {
-  res.send('Successful DELETE to unregister user');
+app.delete('/users/:Username', (req, res) => {
+  Users.findOneAndRemove({ Username: req.params.Username })
+    .then((user) => {
+      if (!user) {
+        res.status(400).send(req.params.Username + ' was not found.');
+      } else {
+        res.status(200).send(req.params.Username + ' was deleted.');
+      }
+    })
+    .catch((err) =>{
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    })
 });
 
 
