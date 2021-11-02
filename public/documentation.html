@@ -19,6 +19,7 @@
         <th>Request body data format</th>
         <th>Response body data format</th>
       </tr>
+    <!-- 1 -->
       <tr>
         <td>Return list of all movies</td>
         <td>/movies</td>
@@ -26,61 +27,101 @@
         <td>None</td>
         <td>JSON object holding data about all movies</td>
       </tr>
+    <!-- 2 -->
       <tr>
         <td>Return data about movie by title</td>
         <td>/movies/[title]</td>
         <td>GET</td>
         <td>None</td>
-        <td>JSON object holding data a movie</td>
+        <td>JSON object holding data the requested movie</td>
       </tr>
+    <!-- 3 -->
       <tr>
-        <td>Return data about genre</td>
+        <td>Return data about all genres</td>
+        <td>/genres</td>
+        <td>GET</td>
+        <td>None</td>
+        <td>JSON object holding data about all requested genre</td>
+      </tr>
+    <!-- 4 -->
+      <tr>
+        <td>Return data about a genre by name</td>
         <td>/genres/[genre]</td>
         <td>GET</td>
         <td>None</td>
         <td>JSON object holding data about the requested genre</td>
       </tr>
+    <!-- 5 -->
       <tr>
-        <td>Return data about director by name</td>
+        <td>Return data about all directors</td>
+        <td>/directors</td>
+        <td>GET</td>
+        <td>None</td>
+        <td>JSON object holding data about all directors</td>
+      </tr>
+    <!-- 6 -->
+      <tr>
+        <td>Return data about a director by name</td>
         <td>/directors/[director]</td>
         <td>GET</td>
         <td>None</td>
         <td>JSON object holding data about the requested director</td>
       </tr>
+    <!-- 7 -->
+      <tr>
+        <td>Return data about all users</td>
+        <td>/users</td>
+        <td>GET</td>
+        <td>None</td>
+        <td>JSON object holding data about all users</td>
+      </tr>
+    <!-- 8 -->
+      <tr>
+        <td>Return data about a user by username</td>
+        <td>/users/[username]</td>
+        <td>GET</td>
+        <td>None</td>
+        <td>JSON object holding data about the requested user</td>
+      </tr>
+    <!-- 9 -->
       <tr>
         <td>Registration of new users</td>
         <td>/users</td>
         <td>POST</td>
-        <td>JSON object holding data about the user added e.g. <br>{ username: John, email: john@email.com }</td>
-        <td>JSON object holding data about the user added including id e.g. <br> { id: 4, username: John, email: john@email.com }</td>
+        <td>JSON object holding data about the user added e.g. <br>{ Username: 'String', <br>Password: 'String', <br>Email: 'String', <br>Birthday: Date }</td>
+        <td>JSON object holding data about the user added including id e.g. <br> { ID: 4, <br>Username: John, <br>Password: 123, <br>Email: john@email.com, <br>Birthday: 1989-12-31T23:00:00.000Z, FavoriteMovies: [] }</td>
       </tr>
+    <!-- 10 -->
       <tr>
-        <td>Users can update their username</td>
-        <td>/users/[id]</td>
+        <td>Users can update their data</td>
+        <td>/users/[title]</td>
         <td>PUT</td>
-        <td>JSON object holding the changed data about the user e.g. <br>{ username: John, email: john@email.com }</td>
-        <td>Text message indicating that the username was successfully</td>
+        <td>JSON object holding the changed data about the user e.g. <br>{ username: 'String', <br>email: 'String' }</td>
+        <td>JSON object holding the data of the user including the updated data</td>
       </tr>
+    <!-- 11 -->
       <tr>
         <td>Users can add a movie to their list of favorites</td>
-        <td>/users/[id]/favlist/[title]</td>
+        <td>/users/[username]/movies/[movieId]</td>
         <td>POST</td>
-        <td>JSON object holding data about the movie added e.g. <br>{ title: Moviename, genre: comedy, director: Johnny, description: Description of the movie }</td>
-        <td>JSON object holding data about the movie added including id e.g. <br>{ id: 222, title: Moviename, genre: comedy, director: Johnny, description: Description of the movie }</td>
+        <td>JSON object holding data about the movie added e.g. <br>{ title: 'String', <br>genre: 'String', <br>director: 'String', <br>description: 'String' }</td>
+        <td>JSON object holding data about the movie added including id e.g. <br>{ id: 222, <br>title: Moviename, <br>genre: comedy, <br>director: Johnny, <br>description: Description of the movie }</td>
       </tr>
+    <!-- 12 -->
       <tr>
         <td>Users can remove a movie from their list of favorites</td>
-        <td>/users/[id]/favlist/[title]</td>
+        <td>/users/[username]/movies/[movieId]</td>
         <td>DELETE</td>
         <td>None</td>
-        <td>Text message showing that movie was removed</td>
+        <td>Text message showing that movie was removed.</td>
       </tr>
+    <!-- 13 -->
       <tr>
         <td>Existing users can unregister</td>
-        <td>/users/[id]</td>
+        <td>/users/username</td>
         <td>DELETE</td>
         <td>None</td>
-        <td>Text message showing that user email was successfully removed</td>
+        <td>Text message showing that the user was successfully removed.</td>
       </tr>
     </table>
   </body>
