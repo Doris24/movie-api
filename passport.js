@@ -1,36 +1,43 @@
-const jwtSecret = 'your_jwt_secret'; // has to be the same key used in the JWTStrategy
+const passport = require('passport'),
+  LocalStrategy = require('passport-local').Strategy,
+  Models = require('./models.js'),
+  passportJWT = require('passport-jwt');
 
-const jwt = require('jsonwebtoken'),
-  passport = require('passport');
+let Users = Models.User,
+  JWTStrategy = passportJWT.Strategy,
+  ExtractJWT = passportJWT.ExtractJwt;
 
-require('./passport'); // local passport file
-
-let generateJWTToken = (user) => {
-  return jwt.sign(user, jwtSecret, {
-    subject: user.User, // the username to encode in JWT
-    expiresIn: '7d', //token expires in 7 days
-    algorithm: 'HS256' // algorithm used to "sign" or encode the values of the JWT
-  });
-}
-
-/* POST login */
-module.exports = (router) => {
-  router.post('/login', (req, res) => {
-    passport.authenticate('local', { session: false }, (error, user, info) => {
-      if (error || !user) {
-        return res.status(400).json({
-          message: 'Something is not right',
-          user: user
-        });
+passport.use(new LocalStrategy(
+  {
+  usernameField: 'Username',
+  passwordField: 'Password'
+  },
+  (username, password, callback) => {
+    console.log(username + '  ' + password);
+    Users.findOne({ Username: username }, (error, user) => {
+      if (error) {
+        console.log(error);
+        return callback(error);
       }
-      req.login(user, { session: false }, (error) => {
-        if (error) {
-          res.send(error);
-        }
-        let token = generateJWTToken(user.toJSON());
-        return res.json({ user, token }); // short for user:user, token:token
-      });
+      if (!user) {
+        console.log('incorrect username');
+        return callback(null, false, {message: 'Incorrect username or password.'});
+      }
+      console.log('finished');
+      return callback(null, user);
+    });
+  }
+));
+
+passport.use(new JWTStrategy({
+  jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+  secretOrKey: 'your_jwt_secret'
+}, (jwtPayload, callback) => {
+  return Users.findById(jwtPayload._id)
+    .then((user) => {
+      return callback(null, user);
     })
-    (req, res);
-  });
-}
+    .catch((error) => {
+      return callback(error)
+    });
+}));

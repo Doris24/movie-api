@@ -18,7 +18,6 @@ const Directors = Models.Director;
 mongoose.connect('mongodb://localhost:27017/myFlixDB', { useNewURLParser: true, useUnifiedTopology: true });
 
 // USE
-
 // logging middleware
 app.use(morgan('common'));
 // sending of static files
@@ -27,10 +26,11 @@ app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true}));
 
-let auth = require('./auth')(app); // app ensures that Exress is available in auth.js
-
+// import auth
+let auth = require('./auth')(app);
+// import passport
 const passport = require('passport');
-require('./passport');
+require('./passport.js');
 
 // REQUESTS
 
@@ -39,20 +39,20 @@ app.get('/', (req,res) => {
 });
 
 // get all movies
-app.get('/movies', (req, res) => {
+app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
   Movies.find()
     .then((movies) => {
       res.status(201).json(movies);
     })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).send('Error: ' + err);
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send('Error: ' + error);
     });
 });
 
 // get data about movie by title
-app.get('/movies/:title', (req, res) => {
-  Movies.findOne({ Title: req.params.title })
+app.get('/movies/:Title', (req, res) => {
+  Movies.findOne({ Title: req.params.Title })
     .then((movie) => {
       res.status(201).json(movie);
     })
@@ -75,8 +75,8 @@ app.get('/genres', (req, res) => {
 });
 
 // get data about one genre
-app.get('/genres/:name', (req, res) => {
-  Genres.findOne({Name: req.params.name })
+app.get('/genres/:Name', (req, res) => {
+  Genres.findOne({Name: req.params.Name })
     .then((genre) => {
       res.status(201).json(genre);
     })
@@ -99,8 +99,8 @@ app.get('/directors', (req, res) => {
 });
 
 // get data about director
-app.get('/directors/:name', (req, res) => {
-  Directors.findOne({ Name: req.params.name })
+app.get('/directors/:Name', (req, res) => {
+  Directors.findOne({ Name: req.params.Name })
     .then((director) => {
       res.status(201).json(director);
     })
@@ -123,8 +123,8 @@ app.get('/users', (req, res) => {
 });
 
 // get one user by username
-app.get('/users/:username', (req, res) => {
-  Users.findOne({ Username: req.params.username })
+app.get('/users/:Username', (req, res) => {
+  Users.findOne({ Username: req.params.Username })
     .then((user) => {
       res.status(201).json(user);
     })
