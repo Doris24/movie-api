@@ -25,6 +25,12 @@ app.use(morgan('common'));
 app.use(express.static('public'));
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true}));
+
+let auth = require('./auth')(app); // app ensures that Exress is available in auth.js
+
+const passport = require('passport');
+require('./passport');
 
 // REQUESTS
 
