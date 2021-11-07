@@ -152,6 +152,7 @@ app.get('/users/:Username', passport.authenticate('jwt', { session: false }), (r
 
 // create new user
 app.post('/users', (req, res) => {
+  let hashedPassword = User.hashedPassword(req.body.Password); // storing hashed passord in MongoDB database
   Users.findOne({ Username: req.body.Username })
     .then((user) => {
       if (user && Object.keys(user).length > 0) {
