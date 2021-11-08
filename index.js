@@ -20,7 +20,8 @@ mongoose.connect('mongodb://localhost:27017/myFlixDB', { useNewURLParser: true, 
 // CORS
 const cors = require('cors');
 
-let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
+let allowedOrigins = ['*'];
+// let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
 app.use(cors({
   origin: (origin, callback) => {
     if(!origin) return callback(null, true);
@@ -32,6 +33,10 @@ app.use(cors({
     return callback(null, true);
   }
 }));
+
+// express-validator
+const { check, validationResult } = require('express-validator');
+
 
 // USE
 // logging middleware
@@ -151,18 +156,31 @@ app.get('/users/:Username', passport.authenticate('jwt', { session: false }), (r
 })
 
 // create new user
-app.post('/users', (req, res) => {
-  let hashedPassword = User.hashedPassword(req.body.Password); // storing hashed passord in MongoDB database
+app.post('/users',
+  // validation logic
+  [
+    check('Username', 'Username is required').isLength({min:5}),
+    check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+    check('Password', 'Password is required').not().isEmpty(),
+    check('Email', 'Email does not apper to be valid').isEmail()
+  ], (req, res) => {
+  // check vaidation object for errors
+  let errors = validationResult(req);
+  if(!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
+  let hashedPassword = Users.hashPassword(req.body.Password); // storing hashed passord in MongoDB database
   Users.findOne({ Username: req.body.Username })
     .then((user) => {
       if (user && Object.keys(user).length > 0) {
         console.log(user);
-        return res.status(400).send(req.body.Username + 'already exists');
+        return res.status(400).send(req.body.Username + ' already exists');
       } else {
         Users
           .create({
             Username: req.body.Username,
-            Password: req.body.Password,
+            Password: hashedPassword,
             Email: req.body.Email,
             Birthday: req.body.Birthday
           })
@@ -185,7 +203,7 @@ app.post('/users', (req, res) => {
 app.put('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
   Users.findOneAndUpdate(
     { Username: req.params.Username },
-    { $set:
+    { $set: // specifies the fields to be updated
       {
         Username: req.body.Username,
         Password: req.body.Password,

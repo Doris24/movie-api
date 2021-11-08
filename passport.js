@@ -26,7 +26,7 @@ passport.use(new LocalStrategy(
       // comparing hashed password with stored hashed password
       if (!user.validatePassword(password)) {
         console.log('incorrect password');
-        return callback(null, false, {message: 'Incorrect password.'})
+        return callback(null, false, {message: 'Incorrect password.'});
       }
       console.log('finished');
       return callback(null, user);

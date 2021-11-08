@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const bcryptjs = require('bcryptjs');
 
 // Defining Schemas
@@ -31,8 +30,8 @@ userSchema.statics.hashPassword = (password) => {
   return bcryptjs.hashSync(password, 10);
 };
 
-userSchema.methods.calidatePAssword = function (password) {
-  return bcrypt.compareSync(password, this.Password);
+userSchema.methods.validatePassword = function(password) {
+  return bcryptjs.compareSync(password, this.Password);
 };
 
 let genreSchema = mongoose.Schema({
