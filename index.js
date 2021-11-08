@@ -59,7 +59,7 @@ require('./passport.js');
 // REQUESTS
 
 app.get('/', (req,res) => {
-  res.send('Welcome to the movie app!');
+  res.send('Welcome to movyis!');
 });
 
 // get all movies
