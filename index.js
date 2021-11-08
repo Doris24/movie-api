@@ -14,8 +14,11 @@ const Users = Models.User;
 const Genres = Models.Genre;
 const Directors = Models.Director;
 
-// allow Mongoose to connect to the db to perform CRUD operations
-mongoose.connect('mongodb://localhost:27017/myFlixDB', { useNewURLParser: true, useUnifiedTopology: true });
+// // allow Mongoose to connect to the db to perform CRUD operations
+// mongoose.connect('mongodb://localhost:27017/myFlixDB', { useNewURLParser: true, useUnifiedTopology: true });
+
+// allow Mongoose to connect to the db to perform CRUD operations with MongoDB Atlas
+mongoose.connect( process.env.CONNECTION_URI, { useNewURLParser: true, useUnifiedTopology: true });
 
 // CORS
 const cors = require('cors');
