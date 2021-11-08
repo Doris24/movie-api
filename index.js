@@ -159,7 +159,7 @@ app.get('/users/:Username', passport.authenticate('jwt', { session: false }), (r
 app.post('/users',
   // validation logic
   [
-    check('Username', 'Username is required').isLength({min:5}),
+    check('Username', 'Username is required and should be at least 5 characters long.').isLength({min:5}),
     check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
     check('Password', 'Password is required').not().isEmpty(),
     check('Email', 'Email does not apper to be valid').isEmail()
@@ -170,7 +170,7 @@ app.post('/users',
     return res.status(422).json({ errors: errors.array() });
   }
 
-  let hashedPassword = Users.hashPassword(req.body.Password); // storing hashed passord in MongoDB database
+  let hashedPassword = Users.hashPassword(req.body.Password); // storing hashed password in MongoDB database
   Users.findOne({ Username: req.body.Username })
     .then((user) => {
       if (user && Object.keys(user).length > 0) {
@@ -199,14 +199,28 @@ app.post('/users',
     });
 });
 
-// update username
-app.put('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
+// update user data
+app.put('/users/:Username', passport.authenticate('jwt', { session: false }),
+  // validation logic
+  [
+    check('Username', 'Username is required and should be at least 5 characters long.').isLength({min:5}),
+    check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+    check('Password', 'Password is required').not().isEmpty(),
+    check('Email', 'Email does not apper to be valid').isEmail()
+  ], (req, res) => {
+  // check vaidation object for errors
+  let errors = validationResult(req);
+  if(!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
+  let hashedPassword = Users.hashPassword(req.body.Password); // storing hashed password in MongoDB database
   Users.findOneAndUpdate(
     { Username: req.params.Username },
     { $set: // specifies the fields to be updated
       {
         Username: req.body.Username,
-        Password: req.body.Password,
+        Password: hashedPassword,
         Email: req.body.Email,
         Birthday: req.body.Birthday,
       },
